@@ -1,0 +1,21 @@
+{% extends 'listings/base.html' %}
+
+{% block title %}Browse Listings{% endblock %}
+
+{% block content %}
+<div class="listings">
+    {% for listing in listings %}
+    <div class="listing-card">
+        <h2>{{ listing.title }}</h2>
+        <p>{{ listing.vehicle.year }} {{ listing.vehicle.make }} {{ listing.vehicle.model }}</p>
+        <p>
+            <strong>Price:</strong> ${{ listing.vehicle.price }}<br>
+            <strong>Mileage:</strong> {{ listing.vehicle.mileage }} miles
+        </p>
+        <a href="{% url 'listings:listing_detail' listing.pk %}">View Details</a>
+    </div>
+    {% empty %}
+    <p>There are no listings at this time.</p>
+    {% endfor %}
+</div>
+{% endblock %}
