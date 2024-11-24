@@ -1,0 +1,15 @@
+{% extends 'listings/base.html' %}
+
+{% block title %}Create Listing{% endblock %}
+
+{% block content %}
+<div class="listing-form">
+    <h1>Create Listing</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Listing</button>
+    </form>
+</div>
+{% endblock %} 

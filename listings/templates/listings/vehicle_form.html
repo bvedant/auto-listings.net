@@ -1,0 +1,13 @@
+{% extends 'listings/base.html' %}
+
+{% block title %}Add Your Vehicle{% endblock %}
+
+{% block content %}
+<div class="listing-form">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Continue to Listing Details</button>
+    </form>
+</div>
+{% endblock %} 

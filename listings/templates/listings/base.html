@@ -136,12 +136,47 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Form styles */
+        .listing-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            margin-bottom: 2em;
+        }
+
+        form p {
+            margin-bottom: 1em;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5em;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 1em;
+        }
+
+        textarea {
+            min-height: 100px;
+        }
     </style>
 </head>
 <body>
     <nav>
         <a href="{% url 'listings:listing_list' %}">auto-listings.net</a>
-        <a href="{% url 'listings:listing_create' %}">Sell Your Car</a>
+        <a href="{% url 'listings:vehicle_create' %}">Sell Your Car</a>
     </nav>
     
     <div class="content">
