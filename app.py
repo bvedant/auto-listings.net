@@ -22,14 +22,32 @@ def close_connection(exception):
         db.close()
 
 def init_db():
+    db = get_db()
+    with app.open_resource('schema.sql', mode='r') as f:
+        db.cursor().executescript(f.read())
+    db.commit()
+
+# Initialize app and database at startup
+try:
+    os.makedirs(os.path.dirname(DATABASE), exist_ok=True)
+except OSError:
+    pass
+
+# Register database commands
+@app.cli.command('init-db')
+def init_db_command():
+    """Clear existing data and create new tables."""
+    init_db()
+    print('Initialized the database.')
+
+# Initialize db if it doesn't exist
+if not os.path.exists(DATABASE):
     with app.app_context():
-        db = get_db()
-        with app.open_resource('schema.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
+        init_db()
+        print('Created the database.')
 
 @app.route('/')
-def home():
+def index():
     db = get_db()
     cursor = db.cursor()
     cursor.execute('''
@@ -40,7 +58,7 @@ def home():
     return render_template('index.html', listings=listings)
 
 @app.route('/listing/new', methods=['GET', 'POST'])
-def new_listing():
+def create():
     if request.method == 'POST':
         try:
             db = get_db()
@@ -63,12 +81,12 @@ def new_listing():
             ))
             db.commit()
             flash('Your listing has been created!', 'success')
-            return redirect(url_for('home'))
+            return redirect(url_for('index'))
         except sqlite3.Error as e:
             flash(f'An error occurred: {e}', 'error')
-            return redirect(url_for('listing'))
+            return redirect(url_for('create'))
 
-    return render_template('listing.html')
+    return render_template('create.html')
 
 @app.route('/listing/<int:listing_id>')
 def listing(listing_id):
@@ -90,7 +108,7 @@ def delete_listing(listing_id):
         flash('Listing deleted successfully', 'success')
     except sqlite3.Error as e:
         flash(f'An error occurred: {e}', 'error')
-    return redirect(url_for('home'))
+    return redirect(url_for('index'))
 
 @app.route('/search')
 def search():
@@ -113,6 +131,4 @@ def search():
     return render_template('index.html', listings=listings, search_query=query)
 
 if __name__ == '__main__':
-    if not os.path.exists(DATABASE):
-        init_db()
     app.run(debug=True)
