@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ listing.title }} - auto-listings.net</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>{{ listing.title }}</h1>
+        <nav>
+            <a href="{{ url_for('home') }}" class="button">Back to Listings</a>
+        </nav>
+    </header>
+
+    <main>
+        <article class="listing-detail">
+            <div class="listing-info">
+                <h2>Vehicle Details</h2>
+                <p><strong>Make:</strong> {{ listing.make }}</p>
+                <p><strong>Model:</strong> {{ listing.model }}</p>
+                <p><strong>Year:</strong> {{ listing.year }}</p>
+                <p><strong>Mileage:</strong> {{ listing.mileage }} miles</p>
+                <p><strong>Price:</strong> ${{ "%.2f"|format(listing.price) }}</p>
+            </div>
+
+            <div class="listing-description">
+                <h2>Description</h2>
+                <p>{{ listing.description }}</p>
+            </div>
+
+            <div class="contact-info">
+                <h2>Contact Information</h2>
+                <p>Email: {{ listing.contact_email }}</p>
+                <p>Listed on: {{ listing.date_posted.strftime('%Y-%m-%d') }}</p>
+            </div>
+        </article>
+    </main>
+</body>
+</html>
